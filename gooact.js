@@ -104,7 +104,7 @@ const Component = exports.Component = class Component {
 
     static patch(dom, vdom, parent=dom.parentNode) {
         const props = Object.assign({}, vdom.props, {children: vdom.children});
-        if (dom.__gooactInstance.constructor == vdom.type) {
+        if (dom.__gooactInstance && dom.__gooactInstance.constructor == vdom.type) {
             dom.__gooactInstance.componentWillReceiveProps(props);
             dom.__gooactInstance.props = props;
             return patch(dom, dom.__gooactInstance.render());
