@@ -24,7 +24,14 @@ And used just as a regular JavaScript library:
 
 .. code-block:: javascript
 
-	import {render, Component} from 'gooact';
+	import Gooact, {render, Component} from 'gooact';
+	
+Due to its nature, Gooact can consume JSX - just don't forget to hook up the Babel together with React preset:
+
+.. code-block:: javascript
+
+	/** @jsx Gooact.createElement */
+	render(<div>Hello World!</div>, document.body);
 
 License
 =======
