@@ -1,5 +1,5 @@
 /* Gooact by SweetPalma, 2018. All rights reserved. */
-((exports) => { 'use strict';
+(exports => { 'use strict';
 
 const createElement = exports.createElement = (type, props, ...children) => {
     props = props != null ? props : {};
@@ -73,9 +73,8 @@ const patch = exports.patch = (dom, vdom, parent=dom.parentNode) => {
                 pool[key].__gooactInstance.componentWillUnmount();
             pool[key].remove();
         }
-        for (const prop in vdom.props) {
-            setAttribute(dom, prop, vdom.props[prop]);
-        }
+        for (const attr of dom.attributes) dom.removeAttribute(attr.name);
+        for (const prop in vdom.props) setAttribute(dom, prop, vdom.props[prop]);
         active.focus();
         return dom;
     }
