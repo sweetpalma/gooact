@@ -2,7 +2,7 @@
 Gooact
 ======
 
-    Copyright 2017 SweetPalma <sweet.palma@yandex.ru>
+    Copyright 2018 SweetPalma <sweet.palma@yandex.ru>
 
 Own React in 160 lines of JavaScript.
 
