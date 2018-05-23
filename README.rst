@@ -32,6 +32,8 @@ Due to its nature, Gooact can consume JSX - just don't forget to hook up the Bab
 
 	/** @jsx Gooact.createElement */
 	render(<div>Hello World!</div>, document.body);
+	
+Notice that `@jsx` pragma comment - without it Babel will fail to tie proper element factory function.
 
 License
 =======
