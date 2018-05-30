@@ -13,7 +13,7 @@ const setAttribute = exports.setAttribute = (dom, key, value) => {
         dom.removeEventListener(eventType, dom.__gooactHandlers[eventType]);
         dom.__gooactHandlers[eventType] = value;
         dom.addEventListener(eventType, dom.__gooactHandlers[eventType]);
-    } else if (key == 'checked' || key == 'value' || key == 'id') {
+    } else if (key == 'checked' || key == 'value' || key == 'className') {
         dom[key] = value;
     } else if (key == 'key') {
         dom.__gooactKey = value;
