@@ -30,7 +30,7 @@ const render = exports.render = (vdom, parent=null) => {
     } else if (typeof vdom == 'boolean' || vdom === null) {
         return mount(document.createTextNode(''));
     } else if (typeof vdom == 'object' && typeof vdom.type == 'function') {
-        return mount(Component.render(vdom, parent));
+        return Component.render(vdom, parent);
     } else if (typeof vdom == 'object' && typeof vdom.type == 'string') {
         const dom = document.createElement(vdom.type);
         for (const child of [/* flatten */].concat(...vdom.children))
@@ -106,12 +106,12 @@ const Component = exports.Component = class Component {
         if (dom.__gooactInstance && dom.__gooactInstance.constructor == vdom.type) {
             dom.__gooactInstance.componentWillReceiveProps(props);
             dom.__gooactInstance.props = props;
-            return patch(dom, dom.__gooactInstance.render());
+            return patch(dom, dom.__gooactInstance.render(), parent);
         } else if (Component.isPrototypeOf(vdom.type)) {
-            const ndom = Component.render(vdom, parent);
+            const ndom = Component.render(vdom);
             return parent ? (parent.replaceChild(ndom, dom) && ndom) : (ndom);
         } else if (!Component.isPrototypeOf(vdom.type)) {
-            return patch(dom, vdom.type(props));
+            return patch(dom, vdom.type(props), parent);
         }
     }
 
