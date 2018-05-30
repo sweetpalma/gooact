@@ -1,8 +1,8 @@
 /* Gooact by SweetPalma, 2018. All rights reserved. */
 (exports => { 'use strict';
 
-const createElement = exports.createElement = (type, props, ...children) => {
-    props = props != null ? props : {};
+const createElement = (type, props, ...children) => {
+    if (props === null) props = {};
     return {type, props, children};
 };
 
