@@ -30,7 +30,7 @@ const render = exports.render = (vdom, parent=null) => {
     } else if (typeof vdom == 'boolean' || vdom === null) {
         return mount(document.createTextNode(''));
     } else if (typeof vdom == 'object' && typeof vdom.type == 'function') {
-        return mount(Component.render(vdom));
+        return mount(Component.render(vdom, parent));
     } else if (typeof vdom == 'object' && typeof vdom.type == 'string') {
         const dom = document.createElement(vdom.type);
         for (const child of [/* flatten */].concat(...vdom.children))
@@ -108,7 +108,7 @@ const Component = exports.Component = class Component {
             dom.__gooactInstance.props = props;
             return patch(dom, dom.__gooactInstance.render());
         } else if (Component.isPrototypeOf(vdom.type)) {
-            const ndom = Component.render(vdom);
+            const ndom = Component.render(vdom, parent);
             return parent ? (parent.replaceChild(ndom, dom) && ndom) : (ndom);
         } else if (!Component.isPrototypeOf(vdom.type)) {
             return patch(dom, vdom.type(props));
