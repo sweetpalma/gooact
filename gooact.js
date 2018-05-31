@@ -64,7 +64,8 @@ const patch = exports.patch = (dom, vdom, parent=dom.parentNode) => {
         for (const index in vchildren) {
             const child = vchildren[index];
             const key = child.props && child.props.key || index;
-            if (pool[key]) { patch(pool[key], child) } else { render(child, dom) }
+            if (pool[key] !== undefined) patch(pool[key], child); 
+            if (pool[key] === undefined) render(child, dom);
             delete pool[key];
         }
         for (const key in pool) {
