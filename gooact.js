@@ -1,7 +1,7 @@
 /* Gooact by SweetPalma, 2018. All rights reserved. */
 (exports => { 'use strict';
 
-const createElement = (type, props, ...children) => {
+const createElement = exports.createElement = (type, props, ...children) => {
     if (props === null) props = {};
     return {type, props, children};
 };
@@ -23,7 +23,6 @@ const setAttribute = exports.setAttribute = (dom, key, value) => {
 };
 
 const render = exports.render = (vdom, parent=null) => {
-    if (parent) parent.textContent = '';
     const mount = parent ? (el => parent.appendChild(el)) : (el => el);
     if (typeof vdom == 'string' || typeof vdom == 'number') {
         return mount(document.createTextNode(vdom));
@@ -32,12 +31,12 @@ const render = exports.render = (vdom, parent=null) => {
     } else if (typeof vdom == 'object' && typeof vdom.type == 'function') {
         return Component.render(vdom, parent);
     } else if (typeof vdom == 'object' && typeof vdom.type == 'string') {
-        const dom = document.createElement(vdom.type);
+        const dom = mount(document.createElement(vdom.type));
         for (const child of [/* flatten */].concat(...vdom.children))
-            dom.appendChild(render(child));
+            render(child, dom);
         for (const prop in vdom.props)
             setAttribute(dom, prop, vdom.props[prop]);
-        return mount(dom);
+        return dom;
     } else {
         throw new Error(`Invalid VDOM: ${vdom}.`);
     }
@@ -48,11 +47,11 @@ const patch = exports.patch = (dom, vdom, parent=dom.parentNode) => {
     if (typeof vdom == 'object' && typeof vdom.type == 'function') {
         return Component.patch(dom, vdom, parent);
     } else if (typeof vdom != 'object' && dom instanceof Text) {
-        return dom.textContent != vdom ? replace(render(vdom)) : dom;
+        return dom.textContent != vdom ? replace(render(vdom, parent)) : dom;
     } else if (typeof vdom == 'object' && dom instanceof Text) {
-        return replace(render(vdom));
+        return replace(render(vdom, parent));
     } else if (typeof vdom == 'object' && dom.nodeName != vdom.type.toUpperCase()) {
-        return replace(render(vdom));
+        return replace(render(vdom, parent));
     } else if (typeof vdom == 'object' && dom.nodeName == vdom.type.toUpperCase()) {
         const pool = {};
         const active = document.activeElement;
@@ -65,7 +64,7 @@ const patch = exports.patch = (dom, vdom, parent=dom.parentNode) => {
         for (const index in vchildren) {
             const child = vchildren[index];
             const key = child.props && child.props.key || index;
-            dom.appendChild(pool[key] ? patch(pool[key], child) : render(child));
+            if (pool[key]) { patch(pool[key], child) } else { render(child, dom) }
             delete pool[key];
         }
         for (const key in pool) {
@@ -108,7 +107,7 @@ const Component = exports.Component = class Component {
             dom.__gooactInstance.props = props;
             return patch(dom, dom.__gooactInstance.render(), parent);
         } else if (Component.isPrototypeOf(vdom.type)) {
-            const ndom = Component.render(vdom);
+            const ndom = Component.render(vdom, parent);
             return parent ? (parent.replaceChild(ndom, dom) && ndom) : (ndom);
         } else if (!Component.isPrototypeOf(vdom.type)) {
             return patch(dom, vdom.type(props), parent);
