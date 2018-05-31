@@ -1,0 +1,21 @@
+{
+  "name": "gooact-demo",
+  "version": "1.0.0",
+  "description": "Gooact",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --progress --colors",
+    "start": "webpack-serve --open --content public"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "webpack": "^4.10.1",
+    "webpack-cli": "^2.1.4",
+    "webpack-serve": "^1.0.2"
+  }
+}
