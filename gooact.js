@@ -55,22 +55,23 @@ const patch = exports.patch = (dom, vdom, parent=dom.parentNode) => {
     } else if (typeof vdom == 'object' && dom.nodeName == vdom.type.toUpperCase()) {
         const pool = {};
         const active = document.activeElement;
-        for (const index in Array.from(dom.childNodes)) {
-            const child = dom.childNodes[index];
-            const key = child.__gooactKey || index;
+        [].concat(...dom.childNodes).map((child, index) => {
+            let key = child.__gooactKey;
+            if (!key && child.tagName != undefined) key = child.tagName + index;
+            if (!key && child.tagName == undefined) key = child.textContent;
             pool[key] = child;
-        }
-        const vchildren = [/* flatten */].concat(...vdom.children);
-        for (const index in vchildren) {
-            const child = vchildren[index];
-            const key = child.props && child.props.key || index;
-            if (pool[key] !== undefined) patch(pool[key], child); 
-            if (pool[key] === undefined) render(child, dom);
+        });
+        [].concat(...vdom.children).map((child, index) => {
+            let key = child.props && child.props.key;
+            if (!key && child.type != undefined) key = child.type.toUpperCase() + index;
+            if (!key && child.type == undefined) key = child.toString();
+            if (pool[key] != undefined) dom.appendChild(patch(pool[key], child));
+            if (pool[key] == undefined) dom.appendChild(render(child, dom));
             delete pool[key];
-        }
+        });
         for (const key in pool) {
-            if (pool[key].__gooactInstance)
-                pool[key].__gooactInstance.componentWillUnmount();
+            const instance = pool[key].__gooactInstance;
+            if (instance) instance.componentWillUnmount();
             pool[key].remove();
         }
         for (const attr of dom.attributes) dom.removeAttribute(attr.name);
