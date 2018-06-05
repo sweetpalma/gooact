@@ -56,17 +56,12 @@ const patch = exports.patch = (dom, vdom, parent=dom.parentNode) => {
         const pool = {};
         const active = document.activeElement;
         [].concat(...dom.childNodes).map((child, index) => {
-            let key = child.__gooactKey;
-            if (!key && child.tagName != undefined) key = child.tagName + index;
-            if (!key && child.tagName == undefined) key = child.textContent;
+            const key = child.__gooactKey || `__index_${index}`;
             pool[key] = child;
         });
         [].concat(...vdom.children).map((child, index) => {
-            let key = child.props && child.props.key;
-            if (!key && child.type != undefined) key = child.type.toUpperCase() + index;
-            if (!key && child.type == undefined) key = child.toString();
-            if (pool[key] != undefined) dom.appendChild(patch(pool[key], child));
-            if (pool[key] == undefined) dom.appendChild(render(child, dom));
+            const key = child.props && child.props.key || `__index_${index}`;
+            dom.appendChild(pool[key] ? patch(pool[key], child) : render(child, dom));
             delete pool[key];
         });
         for (const key in pool) {
