@@ -15,6 +15,10 @@ const setAttribute = exports.setAttribute = (dom, key, value) => {
         dom.addEventListener(eventType, dom.__gooactHandlers[eventType]);
     } else if (key == 'checked' || key == 'value' || key == 'className') {
         dom[key] = value;
+    } else if (key == 'style' && typeof value == 'object') {
+        Object.assign(dom.style, value);
+    } else if (key == 'ref' && typeof value == 'function') {
+        value(dom);
     } else if (key == 'key') {
         dom.__gooactKey = value;
     } else if (typeof value != 'object' && typeof value != 'function') {
