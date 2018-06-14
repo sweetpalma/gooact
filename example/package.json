@@ -1,7 +1,7 @@
 {
-  "name": "gooact-demo",
+  "name": "gooact-example",
   "version": "1.0.0",
-  "description": "Gooact",
+  "description": "Gooact Example.",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
