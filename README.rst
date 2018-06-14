@@ -4,7 +4,8 @@ Gooact
 
     Copyright 2018 SweetPalma <sweet.palma@yandex.ru>
 
-Own React in 160 lines of JavaScript.
+Own React in 160 lines of JavaScript - repository for Medium article code:
+https://medium.com/@sweetpalma/gooact-react-in-160-lines-of-javascript-44e0742ad60f
 
 Introduction
 ============
@@ -31,7 +32,7 @@ Due to its nature, Gooact can consume JSX - just don't forget to hook up the Bab
 .. code-block:: javascript
 
 	/** @jsx Gooact.createElement */
-	render(<div>Hello World!</div>, document.body);
+	render(<div>Hello World!</div>, document.getElementById('root'));
 	
 Notice that `@jsx` pragma comment - without it Babel will fail to tie proper element factory function. Check :code:`example` folder for a bigger snippet.
 
