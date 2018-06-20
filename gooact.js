@@ -1,10 +1,7 @@
 /* Gooact by SweetPalma, 2018. All rights reserved. */
 (exports => { 'use strict';
 
-const createElement = exports.createElement = (type, props, ...children) => {
-    if (props === null) props = {};
-    return {type, props, children};
-};
+const createElement = exports.createElement = (type, props, ...children) => ({type, props || {}, children});
 
 const setAttribute = exports.setAttribute = (dom, key, value) => {
     if (typeof value == 'function' && key.startsWith('on')) {
