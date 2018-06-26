@@ -1,12 +1,12 @@
 /* Gooact by SweetPalma, 2018. All rights reserved. */
-(exports => { 'use strict';
+(() => { 'use strict';
 
-const createElement = exports.createElement = (type, props, ...children) => {
+const createElement = (type, props, ...children) => {
     if (props === null) props = {};
     return {type, props, children};
 };
 
-const setAttribute = exports.setAttribute = (dom, key, value) => {
+const setAttribute = (dom, key, value) => {
     if (typeof value == 'function' && key.startsWith('on')) {
         const eventType = key.slice(2).toLowerCase();
         dom.__gooactHandlers = dom.__gooactHandlers || {};
@@ -26,7 +26,7 @@ const setAttribute = exports.setAttribute = (dom, key, value) => {
     }
 };
 
-const render = exports.render = (vdom, parent=null) => {
+const render = (vdom, parent=null) => {
     const mount = parent ? (el => parent.appendChild(el)) : (el => el);
     if (typeof vdom == 'string' || typeof vdom == 'number') {
         return mount(document.createTextNode(vdom));
@@ -36,17 +36,15 @@ const render = exports.render = (vdom, parent=null) => {
         return Component.render(vdom, parent);
     } else if (typeof vdom == 'object' && typeof vdom.type == 'string') {
         const dom = mount(document.createElement(vdom.type));
-        for (const child of [/* flatten */].concat(...vdom.children))
-            render(child, dom);
-        for (const prop in vdom.props)
-            setAttribute(dom, prop, vdom.props[prop]);
+        for (const child of [].concat(...vdom.children)) render(child, dom);
+        for (const prop in vdom.props) setAttribute(dom, prop, vdom.props[prop]);
         return dom;
     } else {
         throw new Error(`Invalid VDOM: ${vdom}.`);
     }
 };
 
-const patch = exports.patch = (dom, vdom, parent=dom.parentNode) => {
+const patch = (dom, vdom, parent=dom.parentNode) => {
     const replace = parent ? el => (parent.replaceChild(el, dom) && el) : (el => el);
     if (typeof vdom == 'object' && typeof vdom.type == 'function') {
         return Component.patch(dom, vdom, parent);
@@ -80,7 +78,7 @@ const patch = exports.patch = (dom, vdom, parent=dom.parentNode) => {
     }
 };
 
-const Component = exports.Component = class Component {
+class Component {
     constructor(props) {
         this.props = props || {};
         this.state = null;
@@ -156,4 +154,7 @@ const Component = exports.Component = class Component {
     }
 };
 
-})(typeof exports != 'undefined' ? exports : window.Gooact = {});
+if (typeof module != 'undefined') module.exports = {createElement, render, Component};
+if (typeof module == 'undefined') window.Gooact  = {createElement, render, Component};
+
+})();
