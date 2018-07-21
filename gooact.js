@@ -113,15 +113,16 @@ class Component {
         }
     }
 
-    setState(nextState) {
-        if (this.base && this.shouldComponentUpdate(this.props, nextState)) {
+    setState(next) {
+        const objs = (a, b) => typeof a == 'object' && typeof a == 'object';
+        if (this.base && this.shouldComponentUpdate(this.props, next)) {
             const prevState = this.state;
-            this.componentWillUpdate(this.props, nextState);
-            this.state = nextState;
+            this.componentWillUpdate(this.props, next);
+            this.state = objs(this.state, next) ? {...this.state, ...next} : next;
             patch(this.base, this.render());
             this.componentDidUpdate(this.props, prevState);
         } else {
-            this.state = nextState;
+            this.state = objs(this.state, next) ? {...this.state, ...next} : next;
         }
     }
 
@@ -156,5 +157,4 @@ class Component {
 
 if (typeof module != 'undefined') module.exports = {createElement, render, Component};
 if (typeof module == 'undefined') window.Gooact  = {createElement, render, Component};
-
 })();
