@@ -114,15 +114,15 @@ class Component {
     }
 
     setState(next) {
-        const objs = (a, b) => typeof a == 'object' && typeof a == 'object';
+        const compat = (a) => typeof this.state == 'object' && typeof a == 'object';
         if (this.base && this.shouldComponentUpdate(this.props, next)) {
             const prevState = this.state;
             this.componentWillUpdate(this.props, next);
-            this.state = objs(this.state, next) ? {...this.state, ...next} : next;
+            this.state = compat(next) ? Object.assign({}, this.state, next) : next;
             patch(this.base, this.render());
             this.componentDidUpdate(this.props, prevState);
         } else {
-            this.state = objs(this.state, next) ? {...this.state, ...next} : next;
+            this.state = compat(next) ? Object.assign({}, this.state, next) : next;
         }
     }
 
