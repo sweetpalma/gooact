@@ -14,8 +14,9 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
-    "webpack": "^4.10.1",
-    "webpack-cli": "^2.1.4",
-    "webpack-serve": "^1.0.2"
+    "babel-preset-stage-2": "^6.24.1",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-serve": "^1.0.4"
   }
 }
